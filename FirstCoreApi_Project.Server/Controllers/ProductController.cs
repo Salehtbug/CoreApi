@@ -1,4 +1,5 @@
-﻿using FirstCoreApi_Project.Server.Models;
+﻿using FirstCoreApi_Project.Server.IDataServices;
+using FirstCoreApi_Project.Server.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,47 +9,46 @@ namespace FirstCoreApi_Project.Server.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly MyDbContext _context; // call the Database
+        private readonly IDataServicess _data;
 
-        public ProductController(MyDbContext context)
+        public ProductController(IDataServicess data)
         {
-            _context = context;
+            _data = data;
         }
 
         [HttpGet]
         public IActionResult GetAllpro()
         {
-
-            var cat = _context.Products.ToList();
-            return Ok(cat);
+            var pro = _data.GetAllProducts();
+            return Ok(pro);
         }
         [HttpGet("{id}")]
         public IActionResult GetproById(int id)
         {
-            var cat = _context.Products.FirstOrDefault(c => c.ProductId == id);
-
-            if (cat == null)
+            var pro = _data.GetProductById(id);
+            if (pro == null)
                 return NotFound();
-
-            return Ok(cat);
+            return Ok(pro);
         }
-        [HttpGet("first-id")]
-        public IActionResult GetfirstId(int id)
-        {
-            var first = _context.Products.FirstOrDefault();
-            if (first == null)
-                return NotFound();
-            return Ok(first);
-        }
-
+       
         [HttpGet("name")]
 
-        public IActionResult Getname(string name)
+        public IActionResult Getname([FromQuery] string name)
         {
-            var Product = _context.Products.FirstOrDefault(n => n.ProductName == name);
-            if (Product == null)
+            var pro = _data.GetProductByName(name);
+            if (pro == null)
                 return NotFound();
-            return Ok(Product);
+            return Ok(pro);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Deletepro(int id)
+        {
+            var pro = _data.GetProductById(id);
+            if (pro == null)
+                return NotFound();
+            _data.DeleteProduct(id);
+            return NoContent();
         }
     }
 }

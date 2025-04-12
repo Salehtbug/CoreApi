@@ -1,4 +1,5 @@
-﻿using FirstCoreApi_Project.Server.Models;
+﻿using FirstCoreApi_Project.Server.IDataServices;
+using FirstCoreApi_Project.Server.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,47 +9,47 @@ namespace FirstCoreApi_Project.Server.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly MyDbContext _context; // call the Database
+        private readonly IDataServicess _data;
 
-        public CategoryController(MyDbContext context)
+        public CategoryController(IDataServicess data)
         {
-            _context = context;
+            _data = data;
         }
 
-        [HttpGet] 
-        public IActionResult GetAllCat()
+        [HttpGet]
+        public IActionResult GetAllcat()
         {
-
-            var cat = _context.Categories.ToList();
+            var cat = _data.GetAllCategories();
             return Ok(cat);
         }
+
         [HttpGet("{id}")]
         public IActionResult GetCatById(int id)
         {
-            var cat = _context.Categories.FirstOrDefault(c => c.CategoryId == id);
-
+            var cat = _data.GetCategoryById(id);
             if (cat == null)
                 return NotFound();
-
             return Ok(cat);
-        }
-        [HttpGet("first-id")]
-        public IActionResult GetfirstId(int id)
-        {
-            var first = _context.Categories.FirstOrDefault();
-            if (first == null)
-                return NotFound();
-            return Ok(first);
         }
 
         [HttpGet("name")]
 
-        public IActionResult Getname(string name)
+        public IActionResult Getname( [FromQuery] string name)
         {
-            var cataygory = _context.Categories.FirstOrDefault(n => n.CategoryName == name);
-            if (cataygory == null)
+            var cat = _data.GetCategoryByName(name);
+            if (cat == null)
                 return NotFound();
-            return Ok(cataygory);
+            return Ok(cat);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteCat(int id)
+        {
+            var cat = _data.GetCategoryById(id);
+            if (cat == null)
+                return NotFound();
+            _data.DeleteCategory(id);
+            return NoContent();
         }
     }
 }

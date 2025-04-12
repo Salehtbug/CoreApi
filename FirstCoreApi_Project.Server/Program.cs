@@ -1,11 +1,15 @@
+using FirstCoreApi_Project.Server.DataServices;
+using FirstCoreApi_Project.Server.IDataServices;
 using FirstCoreApi_Project.Server.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("YourConnectionString")));
+
 
 
 builder.Services.AddControllers();
@@ -13,12 +17,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IDataServicess, DataServices>();
+
 var app = builder.Build();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline. 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
