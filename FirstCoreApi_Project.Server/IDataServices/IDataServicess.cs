@@ -1,4 +1,5 @@
-﻿using FirstCoreApi_Project.Server.Models;
+﻿using FirstCoreApi_Project.Server.DTOs;
+using FirstCoreApi_Project.Server.Models;
 
 namespace FirstCoreApi_Project.Server.IDataServices
 {
@@ -8,6 +9,11 @@ namespace FirstCoreApi_Project.Server.IDataServices
         Category GetCategoryById(int id);
         Category GetCategoryByName(string name);
         void DeleteCategory(int id);
+        public bool AddCat(CategoryDTO DTO);
+        void UpdateCategory(Category category);
+
+
+
 
         List<Product> GetAllProducts();
         Product GetProductById(int id);

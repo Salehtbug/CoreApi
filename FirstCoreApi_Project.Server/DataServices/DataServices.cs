@@ -1,4 +1,5 @@
-﻿using FirstCoreApi_Project.Server.IDataServices;
+﻿using FirstCoreApi_Project.Server.DTOs;
+using FirstCoreApi_Project.Server.IDataServices;
 using FirstCoreApi_Project.Server.Models;
 
 namespace FirstCoreApi_Project.Server.DataServices
@@ -49,5 +50,28 @@ namespace FirstCoreApi_Project.Server.DataServices
             }
         }
 
+     public bool AddCat(CategoryDTO DTO)
+        {
+            var cat = new Category
+            {
+                CategoryName = DTO.CategoryName,
+                CategoryDescription = DTO.CategoryDescription
+            };
+             _context.Categories.Add(cat);
+            _context.SaveChanges();
+            return true;
+
+        }
+
+        public void UpdateCategory(Category category)
+        {
+            var exCategory = GetCategoryById(category.CategoryId);
+            if (exCategory != null)
+            {
+                exCategory.CategoryName = category.CategoryName;
+                _context.SaveChanges();
+            }
+        }
     }
 }
+    
