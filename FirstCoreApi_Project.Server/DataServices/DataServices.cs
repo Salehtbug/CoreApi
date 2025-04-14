@@ -1,6 +1,7 @@
 ﻿using FirstCoreApi_Project.Server.DTOs;
 using FirstCoreApi_Project.Server.IDataServices;
 using FirstCoreApi_Project.Server.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace FirstCoreApi_Project.Server.DataServices
 {
@@ -22,14 +23,17 @@ namespace FirstCoreApi_Project.Server.DataServices
         public Category GetCategoryByName(string name) =>
             _context.Categories.FirstOrDefault(c => c.CategoryName == name);
 
+
+
+
+
         public void DeleteCategory(int id)
         {
             var cat = GetCategoryById(id);
-            if (cat != null)
-            {
+
                 _context.Categories.Remove(cat);
                 _context.SaveChanges();
-            }
+            
         }
 
         public List<Product> GetAllProducts() => _context.Products.ToList();

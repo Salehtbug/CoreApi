@@ -1,0 +1,41 @@
+<h3 class="text-center mt-4">All Categories</h3>
+
+<table class="table table-bordered table-hover text-center w-75 mx-auto mt-3">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Category Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let cat of categories">
+
+            
+            <tr *ngIf="editModeId === cat.categoryId; else normalRow">
+                <td>{{ cat.categoryId }}</td>
+                <td>
+                    <input [(ngModel)]="updatedCategory.CategoryName" class="form-control" />
+                </td>
+                <td>
+                    <button class="btn btn-success btn-sm me-1" (click)="updateCategory(cat.categoryId)">Save</button>
+                    <button class="btn btn-secondary btn-sm" (click)="cancelEdit()">Cancel</button>
+                </td>
+            </tr>
+
+            
+            <ng-template #normalRow>
+                <tr>
+                    <td>{{ cat.categoryId }}</td>
+                    <td>{{ cat.categoryName }}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm me-1" (click)="startEdit(cat)">Edit</button>
+                        <button class="btn btn-danger btn-sm me-1" (click)="deleteCategory(cat.categoryId)">Delete</button>
+                        <a [routerLink]="['/category-details', cat.categoryId]" class="btn btn-info btn-sm">Details</a>
+                    </td>
+                </tr>
+            </ng-template>
+
+        </ng-container>
+    </tbody>
+</table>

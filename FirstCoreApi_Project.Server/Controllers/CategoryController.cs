@@ -3,6 +3,8 @@ using FirstCoreApi_Project.Server.IDataServices;
 using FirstCoreApi_Project.Server.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using FirstCoreApi_Project.Server.Delegates;
+
 
 namespace FirstCoreApi_Project.Server.Controllers
 {
@@ -33,15 +35,17 @@ namespace FirstCoreApi_Project.Server.Controllers
             return Ok(cat);
         }
 
+
         [HttpGet("name")]
 
-        public IActionResult Getname( [FromQuery] string name)
+        public IActionResult Getname([FromQuery] string name)
         {
             var cat = _data.GetCategoryByName(name);
             if (cat == null)
                 return NotFound();
             return Ok(cat);
         }
+
 
         [HttpDelete("{id}")]
         public IActionResult DeleteCat(int id)
@@ -52,7 +56,7 @@ namespace FirstCoreApi_Project.Server.Controllers
             _data.DeleteCategory(id);
             return NoContent();
         }
-
+        
         [HttpPost]
         public IActionResult AddCategory([FromForm] CategoryDTO DTO)
         {
